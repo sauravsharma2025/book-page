@@ -16,7 +16,7 @@ export const SERVER_CONFIG = {
   BODY_LIMIT,
   CORS_OPTIONS,
 };
-
+export const OK = 200;
 const {
   npm_package_name: pkgName = "",
   npm_package_version: pkgVersion = "",

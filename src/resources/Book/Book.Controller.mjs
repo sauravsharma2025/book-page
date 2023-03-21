@@ -1,31 +1,50 @@
 import ResponseBody from "@am92/express-utils/ResponseBody";
+import { OK } from "../../../config/SERVER_CONFIG.mjs";
 import PageModel from "../Pages/Page.Model.mjs";
 import BookModel from "./Book.Model.mjs";
 
 const listAllBook = async (request, response, next) => {
   const result = await BookModel.findMany();
+  const queryResult = await BookModel.aggregate([
+    {
+      $lookup: {
+        from: "book_pages",
+        localField: "_id",
+        foreignField: "bookId",
+        as: "mycustom",
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        totalPages: { $size: "$mycustom" },
+        pages: "$mycustom",
+      },
+    },
+  ]);
+
   const responseBody = new ResponseBody(
-    200,
+    OK,
     "Loaded book successfully",
-    result
+    queryResult
   );
   response.body = responseBody;
   process.nextTick(next);
 };
 
-async function searchBook(request, response, next) {
+const searchBook = async (request, response, next) => {
   const { body } = request;
   const data = await BookModel.search(body);
   const pages = await PageModel.search({ bookId: body });
   const responseBody = new ResponseBody(
-    200,
+    OK,
     "Books Searched Successfully",
     data,
     pages
   );
   response.body = responseBody;
   process.nextTick(next);
-}
+};
 
 const deleteBookById = async (request, response, next) => {
   const { body } = request;
@@ -33,7 +52,7 @@ const deleteBookById = async (request, response, next) => {
   const result = await BookModel.removeById(body);
 
   const responseBody = new ResponseBody(
-    200,
+    OK,
     "Book Record deleted Successfully",
     result,
     deletePage
@@ -46,20 +65,20 @@ const updateBookById = async (request, response, next) => {
   console.log("SK@", body);
   const result = await BookModel.updateById(body._id, body);
   const responseBody = new ResponseBody(
-    200,
+    OK,
     "Books Records Updated Successfully",
     result
   );
   response.body = responseBody;
   process.nextTick(next);
 };
-async function createBook(request, response, next) {
+const createBook = async (request, response, next) => {
   const { body } = request;
   const data = await BookModel.createOne(body);
-  const responseBody = new ResponseBody(200, "New Book Created", data);
+  const responseBody = new ResponseBody(OK, "New Book Created", data);
   response.body = responseBody;
   process.nextTick(next);
-}
+};
 
 const BookController = {
   createBook,
