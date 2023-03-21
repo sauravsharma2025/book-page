@@ -16,10 +16,12 @@ const listAllBook = async (request, response, next) => {
 async function searchBook(request, response, next) {
   const { body } = request;
   const data = await BookModel.search(body);
+  const pages = await PageModel.search({ bookId: body });
   const responseBody = new ResponseBody(
     200,
     "Books Searched Successfully",
-    data
+    data,
+    pages
   );
   response.body = responseBody;
   process.nextTick(next);
