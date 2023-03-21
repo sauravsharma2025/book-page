@@ -4,13 +4,13 @@ import PageModel from "../Pages/Page.Model.mjs";
 import BookModel from "./Book.Model.mjs";
 
 const listAllBook = async (request, response, next) => {
-  const result = await BookModel.findMany();
   const queryResult = await BookModel.aggregate([
     {
       $lookup: {
         from: "book_pages",
         localField: "_id",
         foreignField: "bookId",
+        pipeline: [{ $project: { content: 1, bookId: 1 } }],
         as: "mycustom",
       },
     },
@@ -25,7 +25,7 @@ const listAllBook = async (request, response, next) => {
 
   const responseBody = new ResponseBody(
     OK,
-    "Loaded book successfully",
+    "Loaded books successfully",
     queryResult
   );
   response.body = responseBody;
@@ -62,7 +62,7 @@ const deleteBookById = async (request, response, next) => {
 };
 const updateBookById = async (request, response, next) => {
   const { body } = request;
-  console.log("SK@", body);
+
   const result = await BookModel.updateById(body._id, body);
   const responseBody = new ResponseBody(
     OK,
@@ -75,7 +75,8 @@ const updateBookById = async (request, response, next) => {
 const createBook = async (request, response, next) => {
   const { body } = request;
   const data = await BookModel.createOne(body);
-  const responseBody = new ResponseBody(OK, "New Book Created", data);
+  const bookName = `Book name is ${data.title}`;
+  const responseBody = new ResponseBody(OK, "New Book Created", bookName);
   response.body = responseBody;
   process.nextTick(next);
 };
