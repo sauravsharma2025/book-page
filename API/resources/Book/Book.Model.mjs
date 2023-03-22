@@ -1,18 +1,28 @@
-import { buildSchema } from "@am92/mongo-odm";
 import { Model } from "@am92/mongo-odm";
+import BookSchema from "./Book.Schema.mjs";
 
-const CollectionSchemaObject = {
-  // Schema Properties as defined by mongoose Schema Class
-  _id: { type: String, required: true },
-  title: { type: String, required: true },
-  authorId: { type: String, required: true },
-  isActive: { type: Boolean, default: true, required: true },
-};
-
-const schemaOptions = {}; // Schema Options as defined by mongoose Schema Class
-
-const CollectionSchema = buildSchema(CollectionSchemaObject, schemaOptions);
-
-const BookModel = new Model("book_free", CollectionSchema);
+const BookModel = new Model("book_free", BookSchema);
 
 export default BookModel;
+// export const listAllBookQuery = async () => {
+//   const queryResult = BookModel.aggregate([
+//     {
+//       $lookup: {
+//         from: "book_pages",
+//         localField: "_id",
+//         foreignField: "bookId",
+//         pipeline: [{ $project: { content: 1, bookId: 1 } }],
+//         as: "mycustom",
+//       },
+//     },
+//     {
+//       $project: {
+//         title: 1,
+//         totalPages: { $size: "$mycustom" },
+//         pages: "$mycustom",
+//       },
+//     },
+//   ]);
+
+//   return queryResult;
+// };

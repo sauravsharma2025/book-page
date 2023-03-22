@@ -1,8 +1,14 @@
 import configureRouter from "@am92/express-utils/configureRouter";
 import BookController from "./Book.Controller.mjs";
 
-const { createBook, searchBook, deleteBookById, updateBookById, listAllBook } =
-  BookController;
+const {
+  createBook,
+  searchBook,
+  deleteBookById,
+  updateBookById,
+  listAllBook,
+  entireData,
+} = BookController;
 
 const masterConfig = {
   routerName: "Book",
@@ -10,27 +16,27 @@ const masterConfig = {
   routesConfig: {
     search: {
       method: "post",
-      path: "/search",
+      path: "/search/:id",
       pipeline: [searchBook],
     },
     createBook: {
       method: "post",
-      path: "/create-book",
+      path: "/",
       pipeline: [createBook],
     },
     deleteBookById: {
-      method: "delete",
-      path: "/delete",
+      method: "get",
+      path: "/:id/delete",
       pipeline: [deleteBookById],
     },
     updateBookById: {
-      method: "patch",
-      path: "/update",
+      method: "post",
+      path: "/:id/update",
       pipeline: [updateBookById],
     },
     listAllBook: {
       method: "get",
-      path: "/listing",
+      path: "/search",
       pipeline: [listAllBook],
     },
   },

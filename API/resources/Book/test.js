@@ -1,11 +1,11 @@
 BOOK:
-CreateAPi:POST /books
+// CreateAPi:POST /books
 ListAPI:GET /books
-findById: GET /books/:id
-updateById: PUT/PATCH /books/:id 
-updateById: POST /books/:id/update
-deleteById: DELETE  /books/:id 
-deleteById: POST  /books/:id/delete
+// findById: GET /books/:id
+// updateById: PUT/PATCH /books/:id 
+// updateById: POST /books/:id/update
+// deleteById: DELETE  /books/:id 
+// deleteById: POST  /books/:id/delete
 search: POST /books/search
 
 
