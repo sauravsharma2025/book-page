@@ -1,7 +1,6 @@
-import { mongoConnect } from "@am92/mongo-odm";
 import { buildSchema } from "@am92/mongo-odm";
 import { Model } from "@am92/mongo-odm";
-await mongoConnect();
+
 const CollectionSchemaObject = {
   // Schema Properties as defined by mongoose Schema Class
   _id: { type: String, required: true },

@@ -1,6 +1,6 @@
 {
   "include": [
-    "src/*.mjs", "config/SERVER_CONFIG.mjs", "app.mjs",
+    "API/*.mjs", "config/SERVER_CONFIG.mjs", "app.mjs",
   ],
   "compilerOptions": {
     "moduleResolution": "node16",

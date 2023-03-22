@@ -11,7 +11,7 @@ import helmet from "helmet";
 import configureApp from "@am92/express-utils/configureApp";
 
 import startServer from "./startServer.mjs";
-import Routes from "./src/routes/index.mjs";
+import Routes from "./API/routes/index.mjs";
 import { SERVER_CONFIG } from "./config/SERVER_CONFIG.mjs";
 
 const { BODY_LIMIT, CORS_OPTIONS } = SERVER_CONFIG;

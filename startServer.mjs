@@ -1,6 +1,6 @@
 import logger from "@am92/api-logger";
 import ExpressUtils from "@am92/express-utils";
-
+import { mongoConnect } from "@am92/mongo-odm";
 import { SERVICE } from "./config/SERVER_CONFIG.mjs";
 
 const PORT = 9001;
@@ -9,7 +9,7 @@ const startServer = async (app) => {
   try {
     // Initialize Express Utils
     await ExpressUtils.initialize();
-
+    await mongoConnect();
     // Start Server
     await app.listen(PORT);
     logger.success(
