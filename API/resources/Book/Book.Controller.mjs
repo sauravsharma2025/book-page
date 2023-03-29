@@ -1,52 +1,13 @@
 import ResponseBody from "@am92/express-utils/ResponseBody";
 import { OK } from "../../../config/SERVER_CONFIG.mjs";
 import PageModel from "../Pages/Page.Model.mjs";
-import BookModel from "./Book.Model.mjs";
-export const listAllBookQuery = async () => {
-  const queryResult = await BookModel.aggregate([
-    {
-      $lookup: {
-        from: "book_pages",
-        localField: "_id",
-        foreignField: "bookId",
-        pipeline: [{ $project: { content: 1, bookId: 1 } }],
-        as: "mycustom",
-      },
-    },
-    {
-      $project: {
-        title: 1,
-        totalPages: { $size: "$mycustom" },
-        pages: "$mycustom",
-      },
-    },
-  ]);
+import BookModel, { listAllBookQuery } from "./Book.Model.mjs";
 
-  return queryResult;
-};
 const listAllBook = async (request, response, next) => {
-  const queryResult = await BookModel.aggregate([
-    {
-      $lookup: {
-        from: "book_pages",
-        localField: "_id",
-        foreignField: "bookId",
-        pipeline: [{ $project: { content: 1, bookId: 1 } }],
-        as: "mycustom",
-      },
-    },
-    {
-      $project: {
-        title: 1,
-        totalPages: { $size: "$mycustom" },
-        pages: "$mycustom",
-      },
-    },
-  ]);
   const responseBody = new ResponseBody(
     OK,
     "Loaded books successfully",
-    queryResult
+    await listAllBookQuery()
   );
   response.body = responseBody;
   process.nextTick(next);
